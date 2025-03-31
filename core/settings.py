@@ -46,12 +46,11 @@ INSTALLED_APPS = [
     'home',
     "api",
     'rest_framework',
-    'drf_spectacular',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     "corsheaders",
     "django_filters",
-
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
