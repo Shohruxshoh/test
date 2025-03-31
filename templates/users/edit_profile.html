@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Profilni Tahrirlash{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>Profilni Tahrirlash</h3>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                    <div class="alert alert-success">
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="profile_picture" class="form-label">Profil Rasm</label>
+                            <input type="file" class="form-control" id="profile_picture" name="profile_picture">
+                        </div>
+                        <div class="mb-3">
+                            <label for="date_of_birth" class="form-label">Tug'ilgan Sana</label>
+                            <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ profile.date_of_birth }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="bio" class="form-label">Bio</label>
+                            <textarea class="form-control" id="bio" name="bio" rows="3">{{ profile.bio }}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="website" class="form-label">Veb-sayt</label>
+                            <input type="url" class="form-control" id="website" name="website" value="{{ profile.website }}">
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success">Saqlash</button>
+                            <a href="{% url 'profile' %}" class="btn btn-secondary">Bekor qilish</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

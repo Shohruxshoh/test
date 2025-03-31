@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Your Cart{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    {% if messages %}
+                    <div class="alert alert-success">
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+    <h1 class="mb-4">Your Cart</h1>
+    {% if cart.items.all %}
+        <ul class="list-group mb-3">
+            {% for item in cart.items.all %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span class='product-price' data-price="{{ item.product.price }}">{{ item.product.name }}</span> 
+                    <span class="product-quantity" data-quantity="{{ item.quantity }}">({{ item.quantity }})</span>
+                    <div>
+                        $<span class='item-total'></span>
+                        <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger btn-sm ms-3">Remove</a>
+                       
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        <h3>Total: $</h3>
+        <a href="{% url 'create_order' %}" class="btn btn-primary">Proceed to Checkout</a>
+ 
+    {% else %}
+        <p>Your cart is empty.</p>
+    {% endif %}
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Har bir cart item uchun umumiy narxni hisoblash funksiyasi
+        function calculateItemTotal() {
+            let totalCartPrice = 0; // Umumiy savat narxi uchun
+
+            $(".list-group-item").each(function () {
+                const price = parseFloat($(this).find(".product-price").data("price")); // Narxni olish
+                const quantity = parseInt($(this).find(".product-quantity").data("quantity")); // Miqdorni olish
+                const itemTotal = price * quantity; // Narx * Miqdor
+
+                // Umumiy narxni o'zgartirish
+                $(this).find(".item-total").text(itemTotal.toFixed(2));
+
+                // Umumiy savat narxini qo'shish
+                totalCartPrice += itemTotal;
+            });
+
+            // Umumiy savat narxini yangilash
+            $("h3").text("Total: $" + totalCartPrice.toFixed(2));
+        }
+
+        // Dastlabki hisob-kitob
+        calculateItemTotal();
+
+        // Miqdor o'zgarishi uchun dynamic calculation (agar kerak bo'lsa)
+        $(".product-quantity").on("change", function () {
+            const newQuantity = parseInt($(this).data("quantity")); // Yangilangan miqdor
+            $(this).data("quantity", newQuantity); // Yangilash
+
+            // Qayta hisob-kitob qilish
+            calculateItemTotal();
+        });
+    });
+</script>
+
+
+{% endblock %}
